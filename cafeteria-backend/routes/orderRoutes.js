@@ -9,6 +9,7 @@ const {
 
 const { protect, adminOnly } = require("../middleware/authMiddleware"); 
 
+const orderRoutes = (io) => {
 const router = express.Router();
 
 // Student places an order
@@ -21,9 +22,12 @@ router.get("/", protect, adminOnly, getOrders);
 router.get("/myorders", protect, getUserOrders);
 
 // Admin updates order status
-router.put("/:id", protect, adminOnly, updateOrderStatus);
+router.put("/:id", protect, adminOnly, (req, res) => updateOrderStatus(req, res, io));
 
 // Admin deletes an order
 router.delete("/:id", protect, adminOnly, deleteOrder);
 
-module.exports = router;
+return router;
+};
+
+module.exports = orderRoutes;
