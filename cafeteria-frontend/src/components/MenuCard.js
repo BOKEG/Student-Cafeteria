@@ -1,12 +1,12 @@
 import React from "react";
 
-const MenuCard = ({ item }) => {
+const MenuCard = ({ item, onAddToCart }) => {
   return (
     <div>
       <h3>{item.name}</h3>
       <p>{item.description}</p>
       <p>Price: ${item.price}</p>
-      <button>Add to Cart</button>
+      <button onClick={() => onAddToCart(item)}>Add to Cart</button>
     </div>
   );
 };

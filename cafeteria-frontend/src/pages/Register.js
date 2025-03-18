@@ -7,80 +7,51 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
     try {
-      // Send registration data to the backend
-      const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/auth/register`, {
-        name,
-        email,
-        password,
-      });
-
-      // Redirect to the login page after successful registration
-      if (response.data) {
-        alert("Account created successfully! Please login.");
-        navigate("/login");
-      }
+      const response = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
+        { name, email, password }
+      );
+      alert("Account created successfully! Please login.");
+      navigate("/login"); // Redirect to the Login page after registration
     } catch (error) {
       setError("Registration failed. Please try again.");
       console.error("Error during registration:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
     <div>
-      <h1>Create Account</h1>
-
-      {/* Display error message */}
+      <h1>Register</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Registration form */}
       <form onSubmit={handleRegister}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating Account..." : "Create Account"}
-        </button>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Register</button>
       </form>
-
-      {/* Link to the login page */}
       <p>
         Already have an account? <a href="/login">Login here</a>.
       </p>

@@ -13,7 +13,7 @@ const Order = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/menu");
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/menu`);
         setMenuItems(response.data);
       } catch (error) {
         setError("Failed to fetch menu items");
@@ -44,8 +44,8 @@ const Order = () => {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.post(
-        "http://localhost:5000/api/orders",
+      await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/api/menu`,
         { items },
         {
           headers: {
