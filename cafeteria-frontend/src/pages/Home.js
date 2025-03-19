@@ -1,32 +1,47 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Home.css"; // Import the CSS file
+import "./Home.css";
 
 const Home = () => {
   return (
     <div className="home-container">
-      <nav className="navbar">
-        <Link to="/" className="nav-link">Home</Link>
-        <Link to="/about" className="nav-link">About</Link>
-        <Link to="/login" className="nav-link">Login</Link>
-        <Link to="/register" className="nav-link">Register</Link>
-      </nav>
+      {/* Hero Section */}
       <div className="hero-section">
-      <img
-          src="https://media.istockphoto.com/id/526239615/photo/group-of-students-in-cafeteria.jpg?s=612x612&w=0&k=20&c=KITdMR0BvlVfWrbSTjhS-tUS4rAE-SpSL8X3fsDrGJM="
-          alt="Cafeteria"
-          className="hero-image"
-        />
+        <div className="hero-overlay"></div>
+        <div className="hero-content">
+          <h1>Welcome to the Student Cafeteria App 🍽️</h1>
+          <p>Order your favorite meals from the comfort of your dorm!</p>
+          <div className="cta-buttons">
+            <Link to="/register">
+              <button className="cta-button">Register</button>
+            </Link>
+            <Link to="/login">
+              <button className="cta-button">Login</button>
+            </Link>
+          </div>
+        </div>
+      </div>
 
-        <h1>Welcome to the Student Cafeteria App</h1>
-        <p>Order your favorite meals from the comfort of your dorm!</p>
-        <div className="cta-buttons">
-          <Link to="/register">
-            <button className="cta-button">Register</button>
-          </Link>
-          <Link to="/login">
-            <button className="cta-button">Login</button>
-          </Link>
+      {/* Features Section */}
+      <div className="features-section">
+        <h2>Why Use Our Cafeteria App?</h2>
+        <div className="features-grid">
+          <div className="feature-box">
+            <h3>📋 Easy Ordering</h3>
+            <p>Browse the menu and order your favorite meals with just a few clicks.</p>
+          </div>
+          <div className="feature-box">
+            <h3>⏳ Save Time</h3>
+            <p>Avoid long cafeteria lines—order ahead and pick up when ready.</p>
+          </div>
+          <div className="feature-box">
+            <h3>💳 Secure Payments</h3>
+            <p>Pay safely online with multiple payment options.</p>
+          </div>
+          <div className="feature-box">
+            <h3>🔔 Real-Time Notifications</h3>
+            <p>Get notified when your order is ready for pickup.</p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import "./Register.css"; // Import the CSS file
 
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Add loading state
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when the form is submitted
+    setError(""); // Clear any previous errors
+
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
@@ -21,13 +26,15 @@ const Register = () => {
     } catch (error) {
       setError("Registration failed. Please try again.");
       console.error("Error during registration:", error);
+    } finally {
+      setLoading(false); // Reset loading state
     }
   };
 
   return (
-    <div>
+    <div className="register-container">
       <h1>Register</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleRegister}>
         <input
           type="text"
@@ -50,10 +57,12 @@ const Register = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Register</button>
+        <button type="submit" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </button>
       </form>
       <p>
-        Already have an account? <a href="/login">Login here</a>.
+        Already have an account? <Link to="/login">Login here</Link>.
       </p>
     </div>
   );

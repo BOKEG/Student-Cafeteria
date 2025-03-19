@@ -1,53 +1,62 @@
 import React, { useState } from "react";
+import "./Cart.css";
 
 const Cart = ({ cart, onPlaceOrder }) => {
-  const [quantities, setQuantities] = useState({}); // State to manage quantities
+  const [quantities, setQuantities] = useState({});
 
-  // Handle quantity change for a specific item
+  // Update quantity for an item
   const handleQuantityChange = (menuItemId, quantity) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [menuItemId]: quantity,
-    }));
+    if (quantity < 1) quantity = 1;
+    setQuantities((prev) => ({ ...prev, [menuItemId]: quantity }));
   };
 
-  // Prepare the cart items with quantities for the order
+  // Prepare order items; now also passing category (optional)
   const prepareOrderItems = () => {
     return cart.map((item) => ({
-      menuItemId: item._id, // Use the menu item's ID
-      quantity: quantities[item._id] || 1, // Default to 1 if quantity is not set
+      menuItemId: item._id, // The backend expects this field
+      quantity: quantities[item._id] || 1,
+      // Optional: include the category for traceability
+      category: item.category, 
     }));
   };
 
-  // Handle place order button click
+  // When "Place Order" is clicked, call parent's order function
   const handlePlaceOrder = () => {
     const orderItems = prepareOrderItems();
-    onPlaceOrder(orderItems); // Pass the order items to the parent component
+    console.log("Order Items Prepared:", orderItems); // Labeled log for debugging
+    onPlaceOrder(orderItems);
   };
 
   return (
-    <div>
-      <h2>Cart</h2>
+    <div className="cart-container">
+      <h2>Your Cart</h2>
       {cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <ul>
+        <ul className="cart-list">
           {cart.map((item) => (
-            <li key={item._id}>
-              {item.name} - ${item.price}
+            <li key={item._id} className="cart-item">
+              <span>
+                {item.name} ({item.category}) - ${item.price.toFixed(2)}
+              </span>
               <input
                 type="number"
                 min="1"
                 value={quantities[item._id] || 1}
                 onChange={(e) =>
-                  handleQuantityChange(item._id, parseInt(e.target.value))
+                  handleQuantityChange(item._id, parseInt(e.target.value, 10))
                 }
+                className="quantity-input"
               />
             </li>
           ))}
         </ul>
       )}
-      <button onClick={handlePlaceOrder} disabled={cart.length === 0}>
+      <button
+        onClick={handlePlaceOrder}
+        disabled={cart.length === 0}
+        className="place-order-button"
+      >
         Place Order
       </button>
     </div>
