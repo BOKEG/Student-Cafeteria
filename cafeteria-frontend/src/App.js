@@ -8,6 +8,8 @@ import Orders from "./pages/Order";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OrderNotification from "./components/OrderNotification";
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 function App() {
   return (

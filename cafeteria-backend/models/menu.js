@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const menuSchema = new mongoose.Schema(
   {
@@ -19,4 +19,6 @@ const menuSchema = new mongoose.Schema(
   { timestamps: true } // Adds createdAt and updatedAt fields
 );
 
-module.exports = mongoose.model("menu", menuSchema);
+// ✅ Use ES module export
+const Menu = mongoose.model("Menu", menuSchema);
+export default Menu;

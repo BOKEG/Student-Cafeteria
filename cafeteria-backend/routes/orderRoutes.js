@@ -1,13 +1,13 @@
-const express = require("express");
-const {
+import express from "express";
+import {
   placeOrder,
   getOrders,
   getUserOrders,
   updateOrderStatus,
   deleteOrder
-} = require("../controllers/orderController");
+} from "../controllers/orderController.js"; // Ensure the controller file also uses ES module syntax
 
-const { protect, adminOnly } = require("../middleware/authMiddleware"); 
+import { protect, adminOnly } from "../middleware/authMiddleware.js"; // Ensure this file also uses ES modules
 
 const orderRoutes = (io) => {
   const router = express.Router();
@@ -30,4 +30,4 @@ const orderRoutes = (io) => {
   return router;
 };
 
-module.exports = orderRoutes;
+export default orderRoutes; // Change module.exports to export default

@@ -1,7 +1,7 @@
-const MenuItem = require("../models/menu");
+import MenuItem from "../models/menu.js";
 
 // @desc Add a new menu item (Admin only)
-const addMenuItem = async (req, res) => {
+export const addMenuItem = async (req, res) => {
   const { name, description, price, category, image, available } = req.body;
 
   try {
@@ -22,7 +22,7 @@ const addMenuItem = async (req, res) => {
 };
 
 // @desc Get all menu items (Public)
-const getMenuItems = async (req, res) => {
+export const getMenuItems = async (req, res) => {
   try {
     const menuItems = await MenuItem.find();
     res.json(menuItems);
@@ -32,7 +32,7 @@ const getMenuItems = async (req, res) => {
 };
 
 // @desc Update a menu item (Admin only)
-const updateMenuItem = async (req, res) => {
+export const updateMenuItem = async (req, res) => {
   try {
     const { name, description, price, category, image, available } = req.body;
     const updatedItem = await MenuItem.findByIdAndUpdate(
@@ -50,7 +50,7 @@ const updateMenuItem = async (req, res) => {
 };
 
 // @desc Delete a menu item (Admin only)
-const deleteMenuItem = async (req, res) => {
+export const deleteMenuItem = async (req, res) => {
   try {
     const deletedItem = await MenuItem.findByIdAndDelete(req.params.id);
 
@@ -61,5 +61,3 @@ const deleteMenuItem = async (req, res) => {
     res.status(500).json({ message: "Error deleting menu item", error: error.message });
   }
 };
-
-module.exports = { addMenuItem, getMenuItems, updateMenuItem, deleteMenuItem };

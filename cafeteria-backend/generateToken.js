@@ -1,5 +1,7 @@
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
+import dotenv from "dotenv";
+import jwt from "jsonwebtoken";
+
+dotenv.config();
 
 const token = jwt.sign(
   { id: "67d029e2a817cc2bb63bf14e" },

@@ -1,6 +1,6 @@
-const express = require("express");
-const { addMenuItem, getMenuItems, updateMenuItem, deleteMenuItem } = require("../controllers/menuController");
-const { protect, adminOnly } = require("../middleware/authMiddleware");
+import express from "express";
+import { addMenuItem, getMenuItems, updateMenuItem, deleteMenuItem } from "../controllers/menuController.js";
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -10,4 +10,4 @@ router.get("/", getMenuItems);                      // Get all menu items (Publi
 router.put("/:id", protect, adminOnly, updateMenuItem); // Update a menu item (Admin only)
 router.delete("/:id", protect, adminOnly, deleteMenuItem); // Delete a menu item (Admin only)
 
-module.exports = router;
+export default router;

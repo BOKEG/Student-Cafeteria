@@ -1,21 +1,19 @@
-const Order = require("../models/order");
-const MenuItem = require("../models/menu");
+import Order from "../models/order.js";
+import MenuItem from "../models/menu.js";
 
 /**
  * @desc Place an Order
  * @route POST /api/orders
  * @access Protected (Student)
  */
-const placeOrder = async (req, res) => {
-  const { items } = req.body; // Expected format: [{ menuItemId, quantity }]
-  
-  // Validate request body
+export const placeOrder = async (req, res) => {
+  const { items } = req.body;
+
   if (!items || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ message: "No items provided for the order" });
   }
 
   try {
-    // Use Promise.all to fetch all menu items concurrently
     const menuItems = await Promise.all(
       items.map((item) => MenuItem.findById(item.menuItemId))
     );
@@ -23,30 +21,22 @@ const placeOrder = async (req, res) => {
     let totalAmount = 0;
     let orderItems = [];
 
-    // Loop through the provided items
     for (let index = 0; index < items.length; index++) {
       const menuItem = menuItems[index];
       const { quantity } = items[index];
 
-      // Validate if the menu item exists
       if (!menuItem) {
-        return res
-          .status(404)
-          .json({ message: `Menu item with ID ${items[index].menuItemId} not found` });
+        return res.status(404).json({ message: `Menu item with ID ${items[index].menuItemId} not found` });
       }
 
-      // Validate quantity (must be at least 1)
       if (!quantity || quantity < 1) {
         return res.status(400).json({ message: "Quantity must be at least 1" });
       }
 
-      // Calculate total amount
       totalAmount += menuItem.price * quantity;
       orderItems.push({ menuItemId: menuItem._id, quantity });
     }
 
-    // Create the order.
-    // Use req.user._id if your auth middleware attaches the user as '_id'
     const order = new Order({
       studentId: req.user._id || req.user.id,
       items: orderItems,
@@ -66,7 +56,7 @@ const placeOrder = async (req, res) => {
  * @route GET /api/orders
  * @access Protected (Admin)
  */
-const getOrders = async (req, res) => {
+export const getOrders = async (req, res) => {
   try {
     const orders = await Order.find()
       .populate("studentId", "name email")
@@ -84,7 +74,7 @@ const getOrders = async (req, res) => {
  * @route GET /api/orders/myorders
  * @access Protected (Student)
  */
-const getUserOrders = async (req, res) => {
+export const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.find({ studentId: req.user._id || req.user.id })
       .populate("items.menuItemId", "name price");
@@ -101,12 +91,11 @@ const getUserOrders = async (req, res) => {
  * @route PUT /api/orders/:id
  * @access Protected (Admin)
  */
-const updateOrderStatus = async (req, res) => {
+export const updateOrderStatus = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: "Order not found" });
 
-    // Validate new status if necessary
     const newStatus = req.body.status;
     const allowedStatuses = ["pending", "preparing", "ready"];
     if (newStatus && !allowedStatuses.includes(newStatus)) {
@@ -116,7 +105,7 @@ const updateOrderStatus = async (req, res) => {
     order.status = newStatus || order.status;
     await order.save();
 
-    // If using Socket.IO, you can emit an event here (if io is available)
+    // Emit event via Socket.IO if needed
     // Example: io.emit("orderUpdated", { orderId: order._id, status: order.status });
 
     res.json({ message: "Order status updated", order });
@@ -131,7 +120,7 @@ const updateOrderStatus = async (req, res) => {
  * @route DELETE /api/orders/:id
  * @access Protected (Admin)
  */
-const deleteOrder = async (req, res) => {
+export const deleteOrder = async (req, res) => {
   try {
     const order = await Order.findByIdAndDelete(req.params.id);
     if (!order) return res.status(404).json({ message: "Order not found" });
@@ -142,5 +131,3 @@ const deleteOrder = async (req, res) => {
     res.status(500).json({ message: "Error deleting order", error: error.message });
   }
 };
-
-module.exports = { placeOrder, getOrders, getUserOrders, updateOrderStatus, deleteOrder };

@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+import jwt from "jsonwebtoken";
+import User from "../models/User.js"; // Ensure this file exports default
 
 const protect = async (req, res, next) => {
   let token;
@@ -11,24 +11,22 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select("-password");
       next();
     } catch (error) {
-      res.status(401).json({ message: "Not authorized, token failed" });
+      return res.status(401).json({ message: "Not authorized, token failed" });
     }
   } else {
-    res.status(401).json({ message: "Not authorized, no token" });
+    return res.status(401).json({ message: "Not authorized, no token" });
   }
-
 };
 
 const adminOnly = (req, res, next) => {
   if (req.user && req.user.role === "admin") {
     next();
   } else {
-    res.status(403).json({ message: "Not authorized as an admin" });
+    return res.status(403).json({ message: "Not authorized as an admin" });
   }
 };
 
-module.exports = { protect, adminOnly };
-
-
+// ✅ Use ES module export
+export { protect, adminOnly };
 
 

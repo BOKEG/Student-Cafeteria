@@ -1,0 +1,35 @@
+{
+  "name": "student-cafeteria",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon cafeteria-backend/server.js",
+    "build": "npm install && npm install --prefix cafeteria-frontend && npm run build --prefix cafeteria-frontend",
+    "start": "cross-env NODE_ENV=production node cafeteria-backend/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BOKEG/Student-Cafeteria.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BOKEG/Student-Cafeteria/issues"
+  },
+  "homepage": "https://github.com/BOKEG/Student-Cafeteria#readme",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.8.4",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
+    "nodemon": "^3.1.9",
+    "socket.io": "^4.8.1"
+  }
+}
