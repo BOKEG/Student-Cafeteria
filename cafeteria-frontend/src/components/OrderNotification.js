@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
 
-const socket = io("http://localhost:5000"); // Ensure backend is running
+// ✅ Dynamic backend URL depending on environment
+const socket = io(
+  process.env.NODE_ENV === "production"
+    ? "https://student-cafeteria.onrender.com" // ✅ Production backend URL
+    : "http://localhost:5000" // ✅ Local development URL
+);
 
 const OrderNotification = () => {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    // Listen for order updates
+    // ✅ Listen for order updates
     socket.on("orderUpdate", (order) => {
-      setNotifications((prev) => [...prev, `Order ${order.orderId} is now ${order.status}`]);
+      setNotifications((prev) => [
+        ...prev,
+        `Order ${order.orderId} is now ${order.status}`,
+      ]);
     });
 
+    // ✅ Cleanup on unmount
     return () => {
       socket.off("orderUpdate");
     };

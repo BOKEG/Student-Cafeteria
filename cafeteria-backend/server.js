@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import menuRoutes from "./routes/menuRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js"; // Pass io instance
+import orderRoutes from "./routes/orderRoutes.js"; // Ensure orderRoutes accepts io instance
 
 // ✅ Load environment variables
 dotenv.config();
@@ -35,14 +35,18 @@ const __dirname = path.dirname(__filename);
 // ✅ Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: [process.env.FRONTEND_URL || "http://localhost:3000"], // Allow both local & deployed frontend
     methods: ["GET", "POST"],
   },
 });
 
 // ✅ Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [process.env.FRONTEND_URL || "http://localhost:3000"],
+  methods: ["GET", "POST"],
+  credentials: true,
+}));
 
 // ✅ Handle Socket.IO Connections
 io.on("connection", (socket) => {

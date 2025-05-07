@@ -21,6 +21,8 @@ const Register = () => {
         `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`,
         { name, email, password }
       );
+      console.log("API URL:", `${process.env.REACT_APP_BACKEND_URL}/api/auth/register`);
+
       alert("Account created successfully! Please login.");
       navigate("/login"); // Redirect to the Login page after registration
     } catch (error) {
