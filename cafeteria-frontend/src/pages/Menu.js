@@ -11,10 +11,6 @@ const Menu = () => {
   const [error, setError] = useState("");
   const [activeCategory, setActiveCategory] = useState("breakfast");
 
-  // ✅ Safely get user from localStorage (prevents JSON parse error)
-  const storedUser = localStorage.getItem("user");
-  const user = storedUser ? JSON.parse(storedUser) : null;
-
   // Fetch menu items from backend
   useEffect(() => {
     const fetchMenu = async () => {
@@ -94,13 +90,6 @@ const Menu = () => {
   return (
     <div className="menu-container">
       <h1>Menu</h1>
-      {/* Show user info if available */}
-      {user && (
-        <div style={{ marginBottom: "1rem" }}>
-          <strong>Welcome, {user.name}</strong> <br />
-          <small>Email: {user.email}</small>
-        </div>
-      )}
       {error && <p className="error-message">{error}</p>}
       {loading ? (
         <p>Loading menu items...</p>

@@ -6,7 +6,6 @@ import Register from "./pages/Register";
 import Menu from "./pages/Menu";
 import Orders from "./pages/Order";
 import Navbar from "./components/Navbar";
-import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OrderNotification from "./components/OrderNotification";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -39,14 +38,6 @@ function App() {
               <Orders />
             </ProtectedRoute>
           }
-        />
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <Profile />
-            </ProtectedRoute>
-        }
         />
         <Route path="*" element={<h1>404 - Page Not Found</h1>} />
       </Routes>
