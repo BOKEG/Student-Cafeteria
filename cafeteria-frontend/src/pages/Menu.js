@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MenuCard from "../components/MenuCard";
 import Cart from "../components/Cart";
-import "./Menu.css"; 
+import "./Menu.css";
 
 const Menu = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -10,6 +10,9 @@ const Menu = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeCategory, setActiveCategory] = useState("breakfast");
+
+  // Get the logged-in user's info from localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
 
   // Fetch menu items from backend
   useEffect(() => {
@@ -30,9 +33,8 @@ const Menu = () => {
     fetchMenu();
   }, []);
 
-  // Add to cart function (global cart across categories)
+  // Add to cart function
   const handleAddToCart = (item) => {
-    // If item already exists, increase its quantity
     setCart((prevCart) => {
       const existingItem = prevCart.find((cartItem) => cartItem._id === item._id);
       if (existingItem) {
@@ -47,7 +49,7 @@ const Menu = () => {
     alert(`${item.name} added to cart!`);
   };
 
-  // Order placement function accepts orderItems prepared by Cart.js
+  // Place order function
   const handlePlaceOrder = async (orderItems) => {
     if (orderItems.length === 0) {
       alert("Your cart is empty. Please add items to place an order.");
@@ -59,8 +61,6 @@ const Menu = () => {
 
     try {
       const token = localStorage.getItem("token");
-
-      // Send the orderItems directly as payload
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URL}/api/orders`,
         { items: orderItems },
@@ -73,7 +73,7 @@ const Menu = () => {
       );
 
       alert("Order placed successfully!");
-      setCart([]); // Clear the cart after successful order placement
+      setCart([]);
     } catch (error) {
       setError("Failed to place order. Please try again.");
       console.error("Error placing order:", error);
@@ -82,7 +82,7 @@ const Menu = () => {
     }
   };
 
-  // Filter items by selected category
+  // Filter menu items by category
   const filteredMenuItems = menuItems.filter(
     (item) => item.category === activeCategory
   );
@@ -90,11 +90,28 @@ const Menu = () => {
   return (
     <div className="menu-container">
       <h1>Menu</h1>
+
+      {/* Profile summary for logged-in student */}
+      <div className="profile-summary">
+        <p>Welcome, <strong>{user?.name}</strong></p>
+        <p>Email: {user?.email}</p>
+        <button
+          onClick={() => window.location.href = "/profile"} // Navigate to Profile page
+          className="profile-button"
+        >
+          View Profile & Orders
+        </button>
+      </div>
+
+      {/* Display any errors */}
       {error && <p className="error-message">{error}</p>}
+
+      {/* Show loading or menu items */}
       {loading ? (
         <p>Loading menu items...</p>
       ) : (
         <>
+          {/* Category filter buttons */}
           <div className="category-tabs">
             {["breakfast", "lunch", "snacks", "beverages"].map((category) => (
               <button
@@ -108,6 +125,8 @@ const Menu = () => {
               </button>
             ))}
           </div>
+
+          {/* Display menu items in selected category */}
           <div className="menu-items">
             {filteredMenuItems.length > 0 ? (
               filteredMenuItems.map((item) => (
@@ -123,7 +142,8 @@ const Menu = () => {
           </div>
         </>
       )}
-      {/* Pass the global cart and the new order placement function */}
+
+      {/* Cart component with place order button */}
       <Cart cart={cart} onPlaceOrder={handlePlaceOrder} />
     </div>
   );

@@ -52,4 +52,27 @@
     justify-content: center;
     gap: 20px;
   }
-  
+  .profile-summary {
+  background-color: #f1f1f1;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.profile-summary p {
+  margin: 0;
+}
+
+.profile-button {
+  margin-top: 8px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.profile-button:hover {
+  background-color: #0056b3;
+}

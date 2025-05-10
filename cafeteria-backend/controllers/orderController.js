@@ -105,8 +105,12 @@ export const updateOrderStatus = async (req, res) => {
     order.status = newStatus || order.status;
     await order.save();
 
-    // Emit event via Socket.IO if needed
-    // Example: io.emit("orderUpdated", { orderId: order._id, status: order.status });
+    // Emit event via Socket.IO
+    const io = req.app.get('io');
+    io.to(order.studentId.toString()).emit("orderStatusUpdated", {
+      orderId: order._id,
+      status: order.status,
+    });
 
     res.json({ message: "Order status updated", order });
   } catch (error) {
@@ -114,6 +118,7 @@ export const updateOrderStatus = async (req, res) => {
     res.status(500).json({ message: "Error updating order", error: error.message });
   }
 };
+
 
 /**
  * @desc Delete an order (Admin only)

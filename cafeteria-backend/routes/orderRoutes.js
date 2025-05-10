@@ -5,12 +5,18 @@ import {
   getUserOrders,
   updateOrderStatus,
   deleteOrder
-} from "../controllers/orderController.js"; // Ensure the controller file also uses ES module syntax
+} from "../controllers/orderController.js";
 
-import { protect, adminOnly } from "../middleware/authMiddleware.js"; // Ensure this file also uses ES modules
+import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
 const orderRoutes = (io) => {
   const router = express.Router();
+
+  // Middleware: Attach `io` to req.app so controllers can access it
+  router.use((req, res, next) => {
+    req.app.set("io", io);
+    next();
+  });
 
   // Student places an order
   router.post("/", protect, placeOrder);
@@ -22,7 +28,7 @@ const orderRoutes = (io) => {
   router.get("/myorders", protect, getUserOrders);
 
   // Admin updates order status
-  router.put("/:id", protect, adminOnly, (req, res) => updateOrderStatus(req, res, io));
+  router.put("/:id", protect, adminOnly, updateOrderStatus);
 
   // Admin deletes an order
   router.delete("/:id", protect, adminOnly, deleteOrder);
@@ -30,4 +36,4 @@ const orderRoutes = (io) => {
   return router;
 };
 
-export default orderRoutes; // Change module.exports to export default
+export default orderRoutes;
